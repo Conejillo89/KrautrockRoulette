@@ -4,6 +4,7 @@ import random
 import time
 import pandas as pd
 import streamlit as st
+import openpyxl
 
 # 1. Configuración de página DEBE SER el primer comando de Streamlit
 st.set_page_config(page_title="Krautrock Roulette Studio", layout="centered")
