@@ -213,6 +213,10 @@ RUTA_EXCEL_LOCAL = "Krautrock/data/German_Progressive_Rock_Bands_and_Albums.xlsx
 # 2. FUNCIÓN DE CARGA Y PARSEO DEL EXCEL
 # ==============================================================================
 def cargar_catalogo(fuente):
+    if isinstance(fuente, str) and not os.path.exists(fuente):
+        st.error(f"❌ Archivo Excel no encontrado en la ruta: {fuente}")
+        return []
+        
     try:
         if isinstance(fuente, str):
             df = pd.read_excel(fuente)
@@ -223,11 +227,14 @@ def cargar_catalogo(fuente):
                 df = pd.read_excel(fuente)
 
         if df.empty:
+            st.warning("⚠️ El archivo de Excel está vacío.")
             return []
 
+        # Columnas por defecto (Primera y segunda)
         col_artista = df.columns[0]
         col_disco = df.columns[1] if len(df.columns) > 1 else df.columns[0]
         
+        # Buscar columnas por palabras clave
         for col in df.columns:
             nombre_col = str(col).lower()
             if "banda" in nombre_col or "artista" in nombre_col or "nombre" in nombre_col:
@@ -235,6 +242,7 @@ def cargar_catalogo(fuente):
             if "disco" in nombre_col or "álbum" in nombre_col or "album" in nombre_col or "título" in nombre_col:
                 col_disco = col
 
+        # Buscar si hay columna de portada
         col_cover = next((col for col in df.columns if "cover" in str(col).lower() or "imagen" in str(col).lower() or "portada" in str(col).lower()), None)
 
         catalogo = []
@@ -243,22 +251,22 @@ def cargar_catalogo(fuente):
             if not artista or artista.lower() == 'nan':
                 continue
 
-            disco = str(row[col_disco]).strip() if col_disco and pd.notna(row[col_disco]) else "Selección Krautrock"
+            disco = str(row[col_disco]).strip() if pd.notna(row[col_disco]) else "Selección Krautrock"
             
-            cover = PORTADA_DEFAULT
-            if col_cover and col_cover in df.columns and pd.notna(row[col_cover]):
-                val_cover = str(row[col_cover]).strip()
-                if val_cover and val_cover.lower() != 'nan':
-                    cover = val_cover
-
+            # Si existe columna de portada, la usamos; si no, la por defecto
+            cover = str(row[col_cover]).strip() if col_cover and pd.notna(row[col_cover]) else PORTADA_DEFAULT
+            
+            # Guardar el registro en el catálogo
             catalogo.append({
                 "artista": artista,
                 "disco": disco,
                 "cover": cover
             })
-
+            
         return catalogo
+
     except Exception as e:
+        st.error(f"Error procesando el archivo: {e}")
         return []
 
 # Inicializar estado del catálogo con respaldo de seguridad
