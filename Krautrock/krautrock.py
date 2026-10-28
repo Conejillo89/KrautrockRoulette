@@ -4,6 +4,7 @@ import random
 import time
 import pandas as pd
 import streamlit as st
+import openpyxl
 
 # 1. Configuración de página DEBE SER el primer comando de Streamlit
 st.set_page_config(page_title="Krautrock Roulette Studio", layout="centered")
@@ -22,7 +23,7 @@ def obtener_base64_archivo(ruta_archivo):
 # ==============================================================================
 
 # 1. Fondo de la Pantalla Principal
-ruta_fondo_principal = "mi_fondo_krautrock.jpg"
+ruta_fondo_principal = "assets/mi_fondo_krautrock.jpg"
 css_fondo_principal = ""
 try:
     base64_img_main = obtener_base64_archivo(ruta_fondo_principal)
@@ -42,7 +43,7 @@ except FileNotFoundError:
     """
 
 # 2. Tipografía Personalizada
-ruta_fuente_local = "Basenji-SemiBold.otf"
+ruta_fuente_local = "assets/Basenji-SemiBold.otf"
 css_fuente_custom = ""
 try:
     base64_font = obtener_base64_archivo(ruta_fuente_local)
@@ -206,7 +207,7 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 PORTADA_DEFAULT = "https://images.unsplash.com/photo-1539375665275-f9de415ef9ac?w=500"
-RUTA_EXCEL_LOCAL = "German_Progressive_Rock_Bands_and_Albums.xlsx"
+RUTA_EXCEL_LOCAL = "data/German_Progressive_Rock_Bands_and_Albums.xlsx"
 
 # ==============================================================================
 # 2. FUNCIÓN DE CARGA Y PARSEO DEL EXCEL
