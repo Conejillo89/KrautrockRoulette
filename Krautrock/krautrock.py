@@ -206,7 +206,7 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 PORTADA_DEFAULT = "https://images.unsplash.com/photo-1539375665275-f9de415ef9ac?w=500"
-RUTA_EXCEL_LOCAL = "German_Progressive_Rock_Bands_and_Albums.xlsx"
+RUTA_EXCEL_LOCAL = "data/German_Progressive_Rock_Bands_and_Albums.xlsx"
 
 # ==============================================================================
 # 2. FUNCIÓN DE CARGA Y PARSEO DEL EXCEL
