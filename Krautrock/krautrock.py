@@ -22,7 +22,7 @@ def obtener_base64_archivo(ruta_archivo):
 # ==============================================================================
 
 # 1. Fondo de la Pantalla Principal
-ruta_fondo_principal = "mi_fondo_krautrock.jpg"
+ruta_fondo_principal = "assets/mi_fondo_krautrock.jpg"
 css_fondo_principal = ""
 try:
     base64_img_main = obtener_base64_archivo(ruta_fondo_principal)
@@ -42,7 +42,7 @@ except FileNotFoundError:
     """
 
 # 2. Tipografía Personalizada
-ruta_fuente_local = "Basenji-SemiBold.otf"
+ruta_fuente_local = "assets/Basenji-SemiBold.otf"
 css_fuente_custom = ""
 try:
     base64_font = obtener_base64_archivo(ruta_fuente_local)
