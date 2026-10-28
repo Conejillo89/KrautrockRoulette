@@ -6,28 +6,29 @@ import pandas as pd
 import streamlit as st
 import openpyxl
 
-# 1. Configuración de página DEBE SER el primer comando de Streamlit
+
 st.set_page_config(page_title="Krautrock Roulette Studio", layout="centered")
 
-# ==============================================================================
-# FUNCIONES AUXILIARES PARA CARGAR ARCHIVOS LOCALES EN BASE64
-# ==============================================================================
+
 def obtener_base64_archivo(ruta_archivo):
     """Convierte cualquier archivo local a cadena Base64."""
     with open(ruta_archivo, "rb") as f:
         datos = f.read()
     return base64.b64encode(datos).decode()
 
-# ==============================================================================
-# CARGA DE RECURSOS LOCALES (IMÁGENES Y FUENTES)
-# ==============================================================================
 
-# 1. Fondo de la Pantalla Principal (Optimizado para Celulares)
+
+
 ruta_fondo_principal = "Krautrock/assets/mi_fondo_krautrock.jpg"
+ruta_fondo_movil = "Krautrock/assets/mi_fondo_krautrock_mobile.jpg" 
+
 css_fondo_principal = ""
 try:
     base64_img_main = obtener_base64_archivo(ruta_fondo_principal)
+    base64_img_movil = obtener_base64_archivo(ruta_fondo_movil) if os.path.exists(ruta_fondo_movil) else base64_img_main
+    
     css_fondo_principal = f"""
+        /* Fondo por defecto (Desktop) */
         [data-testid="stMain"] {{
             background-image: url("data:image/jpg;base64,{base64_img_main}") !important;
             background-size: cover !important;
@@ -35,12 +36,13 @@ try:
             background-attachment: fixed !important;
         }}
 
-        /* Corrección para que el fondo no falle ni se distorsione en celulares */
+        /* Fondo específico para Celulares (Media Query) */
         @media screen and (max-width: 768px) {{
             [data-testid="stMain"] {{
-                background-attachment: scroll !important; /* 'fixed' falla en móviles */
+                background-image: url("data:image/jpg;base64,{base64_img_movil}") !important;
                 background-size: cover !important;
                 background-position: center center !important;
+                background-attachment: scroll !important;
             }}
         }}
     """
@@ -51,7 +53,6 @@ except FileNotFoundError:
         }
     """
 
-# 2. Tipografía Personalizada Adaptativa
 ruta_fuente_local = "Krautrock/assets/Basenji-SemiBold.otf"
 css_fuente_custom = ""
 try:
@@ -75,9 +76,7 @@ try:
 except FileNotFoundError:
     pass
 
-# ==============================================================================
-# INYECCIÓN UNIFICADA DE ESTILOS CSS RESPONSIVOS
-# ==============================================================================
+
 st.markdown(f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
@@ -239,9 +238,7 @@ st.markdown(f"""
 PORTADA_DEFAULT = "https://images.unsplash.com/photo-1539375665275-f9de415ef9ac?w=500"
 RUTA_EXCEL_LOCAL = "Krautrock/data/German_Progressive_Rock_Bands_and_Albums.xlsx"
 
-# ==============================================================================
-# 2. FUNCIÓN DE CARGA Y PARSEO DEL EXCEL
-# ==============================================================================
+
 def cargar_catalogo(fuente):
     if isinstance(fuente, str) and not os.path.exists(fuente):
         st.error(f"❌ Archivo Excel no encontrado en la ruta: {fuente}")
@@ -309,9 +306,7 @@ if "catalogo" not in st.session_state or not st.session_state.catalogo:
 
 lista_artistas = sorted(list(set(item['artista'] for item in st.session_state.catalogo)))
 
-# ==============================================================================
-# 3. INTERFAZ PRINCIPAL & RULETA
-# ==============================================================================
+
 st.markdown("<h1 style='text-align: center;'>Krautrock Roulette</h1>", unsafe_allow_html=True)
 st.markdown("<p class='hero-subtitle'>Explora el universo del rock experimental alemán de los años setenta.</p>", unsafe_allow_html=True)
 
