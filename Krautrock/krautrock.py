@@ -42,7 +42,7 @@ except FileNotFoundError:
         }
     """
 
-# 2. Tipografía Personalizada
+# 2. Tipografía Personalizada Adaptativa
 ruta_fuente_local = "Krautrock/assets/Basenji-SemiBold.otf"
 css_fuente_custom = ""
 try:
@@ -55,16 +55,19 @@ try:
 
         h1, .stApp h1 {{
             font-family: 'MiFuentePersonalizada', sans-serif !important;
-            font-size: 70px !important;
+            /* Usamos clamp para que escale fluido: min, ideal, max */
+            font-size: clamp(36px, 8vw, 64px) !important;
             color: #FF4757 !important;
-            text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 71, 87, 0.4) !important;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 71, 87, 0.4) !important;
+            text-align: center !important;
+            word-break: break-word !important;
         }}
     """
 except FileNotFoundError:
     pass
 
 # ==============================================================================
-# INYECCIÓN UNIFICADA DE ESTILOS CSS
+# INYECCIÓN UNIFICADA DE ESTILOS CSS RESPONSIVOS
 # ==============================================================================
 st.markdown(f"""
     <style>
@@ -87,65 +90,72 @@ st.markdown(f"""
         color: #f1f5f9;
     }}
 
-    /* Estilo de la sombra del subtítulo */
+    /* Estilo de la sombra del subtítulo adaptado */
     .hero-subtitle {{
         text-align: center;
         color: #ffffff;
-        font-size: 18px;
+        font-size: clamp(14px, 4vw, 18px);
         text-shadow: 2px 2px 8px rgba(0,0,0,0.9);
-        margin-bottom: 25px;
+        margin-bottom: 20px;
+        padding: 0 10px;
     }}
 
-    /* Tarjeta de resultado */
+    /* Tarjeta de resultado responsiva */
     .kraut-card {{
         background-image:
             linear-gradient(
                 135deg,
-                rgba(30, 34, 43, 0.85),
-                rgba(17, 19, 24, 0.85)
+                rgba(30, 34, 43, 0.9),
+                rgba(17, 19, 24, 0.9)
             );
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         border-radius: 16px;
-        padding: 30px;
+        padding: 20px 15px;
         text-align: center;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8),
                     0 0 15px rgba(255, 71, 87, 0.2);
         border: 1px solid #ff4757;
-        margin-top: 20px;
+        margin-top: 15px;
+        width: 100%;
+        box-sizing: border-box;
     }}
 
     .artist-title {{
         color: #ff4757;
-        font-size: 32px;
+        font-size: clamp(22px, 6vw, 32px);
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
         margin-top: 10px;
         text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        word-wrap: break-word;
     }}
 
     .album-sub {{
         color: #ffa502;
-        font-size: 20px;
+        font-size: clamp(16px, 4vw, 20px);
         font-weight: 600;
         font-style: italic;
+        word-wrap: break-word;
     }}
 
-    /* Contenedor estandarizado para las portadas con espacio inferior añadido */
+    /* Contenedor estandarizado para las portadas adaptables */
     .cover-container {{
         display: flex;
         justify-content: center;
         align-items: center;
         margin-top: 15px;
-        margin-bottom: 30px; /* Espacio perfecto antes del botón */
+        margin-bottom: 25px;
+        width: 100%;
     }}
     
     .cover-container img {{
         width: 100% !important;
-        max-width: 320px !important;
-        height: 320px !important;
+        max-width: 280px !important;
+        height: auto !important;
+        aspect-ratio: 1 / 1 !important;
         object-fit: cover !important;
         border-radius: 12px;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7), 0 0 10px rgba(255, 165, 2, 0.3);
@@ -162,18 +172,19 @@ st.markdown(f"""
     div.stButton > button {{
         background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
         color: white;
-        font-size: 20px;
+        font-size: clamp(16px, 4vw, 20px);
         font-weight: bold;
         border-radius: 50px;
-        padding: 15px 40px;
+        padding: 12px 20px;
         border: none;
         width: 100%;
-        max-width: 400px;
+        max-width: 380px;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6),
                     0 4px 15px rgba(255, 71, 87, 0.6);
         transition: all 0.3s ease;
         display: block;
         margin: 0 auto;
+        white-space: normal !important;
     }}
 
     div.stButton > button:hover {{
@@ -183,7 +194,7 @@ st.markdown(f"""
                     0 6px 20px rgba(255, 71, 87, 0.8);
     }}
 
-    /* Texto encima de la barra de búsqueda (Centrado, Blanco y con Sombra) */
+    /* Texto encima de la barra de búsqueda adaptado */
     div[data-testid="stSelectbox"] > label {{
         display: block !important;
         width: 100% !important;
@@ -194,14 +205,24 @@ st.markdown(f"""
         width: 100% !important;
         text-align: center !important;
         margin: 0 auto !important;
-
         color: #ffffff !important;
-        font-size: 18px !important;
+        font-size: clamp(15px, 4vw, 18px) !important;
         font-weight: 700 !important;
-
         text-shadow:
             2px 2px 6px rgba(0, 0, 0, 0.95),
             0 0 10px rgba(0, 0, 0, 0.75) !important;
+    }}
+
+    /* MEDIA QUERY ESPECÍFICA PARA DISPOSITIVOS MÓVILES (Ancho menor a 480px) */
+    @media screen and (max-width: 480px) {{
+        .block-container {{
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+            padding-top: 2rem !important;
+        }}
+        .kraut-card {{
+            padding: 15px 10px;
+        }}
     }}
     </style>
 """, unsafe_allow_html=True)
@@ -230,11 +251,9 @@ def cargar_catalogo(fuente):
             st.warning("⚠️ El archivo de Excel está vacío.")
             return []
 
-        # Columnas por defecto (Primera y segunda)
         col_artista = df.columns[0]
         col_disco = df.columns[1] if len(df.columns) > 1 else df.columns[0]
         
-        # Buscar columnas por palabras clave
         for col in df.columns:
             nombre_col = str(col).lower()
             if "banda" in nombre_col or "artista" in nombre_col or "nombre" in nombre_col:
@@ -242,7 +261,6 @@ def cargar_catalogo(fuente):
             if "disco" in nombre_col or "álbum" in nombre_col or "album" in nombre_col or "título" in nombre_col:
                 col_disco = col
 
-        # Buscar si hay columna de portada
         col_cover = next((col for col in df.columns if "cover" in str(col).lower() or "imagen" in str(col).lower() or "portada" in str(col).lower()), None)
 
         catalogo = []
@@ -252,11 +270,8 @@ def cargar_catalogo(fuente):
                 continue
 
             disco = str(row[col_disco]).strip() if pd.notna(row[col_disco]) else "Selección Krautrock"
-            
-            # Si existe columna de portada, la usamos; si no, la por defecto
             cover = str(row[col_cover]).strip() if col_cover and pd.notna(row[col_cover]) else PORTADA_DEFAULT
             
-            # Guardar el registro en el catálogo
             catalogo.append({
                 "artista": artista,
                 "disco": disco,
@@ -269,7 +284,6 @@ def cargar_catalogo(fuente):
         st.error(f"Error procesando el archivo: {e}")
         return []
 
-# Inicializar estado del catálogo con respaldo de seguridad
 if "catalogo" not in st.session_state or not st.session_state.catalogo:
     catalogo_cargado = []
     if os.path.exists(RUTA_EXCEL_LOCAL):
@@ -289,20 +303,17 @@ lista_artistas = sorted(list(set(item['artista'] for item in st.session_state.ca
 # ==============================================================================
 # 3. INTERFAZ PRINCIPAL & RULETA
 # ==============================================================================
-st.markdown("<h1 style='text-align: center;'> Krautrock Roulette</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Krautrock Roulette</h1>", unsafe_allow_html=True)
 st.markdown("<p class='hero-subtitle'>Explora el universo del rock experimental alemán de los años setenta.</p>", unsafe_allow_html=True)
 
-# 1. Zona de resultados
 zona_resultado = st.empty()
 
-# 2. Botón centrado garantizado mediante columnas simétricas
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     presionado = st.button("🔀 ¡SELECCIONAR BANDA ALEATORIA!")
 
 st.write("")
 
-# 3. Buscador Desplegable debajo del botón
 opcion_seleccionada = st.selectbox(
     "🔍 O selecciona un artista del catálogo:",
     ["-- Elegir de la lista --"] + lista_artistas
@@ -315,7 +326,7 @@ if presionado:
         muestra = random.choice(st.session_state.catalogo)
         zona_resultado.markdown(f"""
             <div class="kraut-card" style="opacity: 0.7;">
-                <p style="font-size: 30px; margin: 0;">🎛️</p>
+                <p style="font-size: 24px; margin: 0;">🎛️</p>
                 <div class="artist-title">{muestra['artista']}</div>
                 <div class="album-sub">{muestra['disco']}</div>
             </div>
@@ -333,7 +344,7 @@ if elegido:
     with zona_resultado.container():
         st.markdown(f"""
             <div class="kraut-card">
-                <p style="font-size: 14px; color: #ffa502; font-weight: bold;">🔊 BANDA SELECCIONADA PARA ESCUCHAR:</p>
+                <p style="font-size: 13px; color: #ffa502; font-weight: bold; margin-bottom: 5px;">🔊 BANDA SELECCIONADA PARA ESCUCHAR:</p>
                 <div class="artist-title">{elegido['artista']}</div>
                 <div class="album-sub">"{elegido['disco']}"</div>
             </div>
