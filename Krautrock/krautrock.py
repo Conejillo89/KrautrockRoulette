@@ -22,7 +22,7 @@ def obtener_base64_archivo(ruta_archivo):
 # CARGA DE RECURSOS LOCALES (IMÁGENES Y FUENTES)
 # ==============================================================================
 
-# 1. Fondo de la Pantalla Principal
+# 1. Fondo de la Pantalla Principal (Optimizado para Celulares)
 ruta_fondo_principal = "Krautrock/assets/mi_fondo_krautrock.jpg"
 css_fondo_principal = ""
 try:
@@ -33,6 +33,15 @@ try:
             background-size: cover !important;
             background-position: center !important;
             background-attachment: fixed !important;
+        }}
+
+        /* Corrección para que el fondo no falle ni se distorsione en celulares */
+        @media screen and (max-width: 768px) {{
+            [data-testid="stMain"] {{
+                background-attachment: scroll !important; /* 'fixed' falla en móviles */
+                background-size: cover !important;
+                background-position: center center !important;
+            }}
         }}
     """
 except FileNotFoundError:
